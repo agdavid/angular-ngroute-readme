@@ -108,11 +108,11 @@ angular
 
 This now allows us to go to the URLs we mentioned above. Awesome! But how do we actually know what the user's ID is? We'd need to go and fetch the user data so it's important that we can access what the variable is actually equal to.
 
-This is where another service provided by `ngRoute` comes in - `$routeParams`. We can inject this into our controllers and see what the ID variable is equal to.
+This is where another service provided by `ngRoute` comes in - `$route`. We can inject this into our controllers and see what the ID variable is equal to.
 
 ```js
-function UserController($routeParams) {
-	// $routeParams = { id: 1231 };
+function UserController($route) {
+	// $route.current.params = { id: 1231 };
 }
 
 angular
@@ -140,14 +140,14 @@ function UserService($http) {
 }
 ```
 
-And we're currently injecting that into our `UserController`, and using `$routeParams` to specify the user's ID.
+And we're currently injecting that into our `UserController`, and using `$route` to specify the user's ID.
 
 ```js
-function UserController($routeParams, UserService) {
+function UserController($route, UserService) {
 	var ctrl = this;
 
 	UserService
-		.getUser($routeParams.id)
+		.getUser($route.current.params.id)
 		.then(function (res) {
 			ctrl.user = res.data; // our user object is populated from the backend
 		});
@@ -169,8 +169,8 @@ angular
 				templateUrl: 'views/user.html',
 				controller: 'UserController as user',
 				resolve: {
-					user: function ($routeParams, UserService) {
-						return UserService.getUser($routeParams.id);
+					user: function ($route, UserService) {
+						return UserService.getUser($route.current.params.id);
 					}
 				}
 			});
@@ -196,3 +196,5 @@ angular
 Simple! No flicker, and we've got dynamic routes working whilst also fetching the relevant data!
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/angular-ngroute-readme'>Angular ngRroute </a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/angular-ngroute-readme'>Angular ngRroute </a> on Learn.co and start learning to code for free.</p>
